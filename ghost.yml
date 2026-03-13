@@ -1,0 +1,35 @@
+services:
+  ghost:
+    image: ghost:alpine          # Lightweight & up-to-date (use ghost:latest if you prefer)
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:2368:2368"    # ← Only bind to localhost → not exposed externally
+    environment:
+      url: http://localhost:2368               # Key for local-only mode
+      NODE_ENV: production                     # Or 'development' if you want hot-reloading/themes watching
+      database__client: mysql
+      database__connection__host: db
+      database__connection__user: ghost
+      database__connection__password: !Varian440   # ← Change this!
+      database__connection__database: ghost
+      # Optional: add SMTP later for newsletter testing (won't send externally yet)
+      # mail__transport: SMTP
+      # mail__options__host: ...
+    volumes:
+      - ./content:/var/lib/ghost/content     # Persistent content (themes, images, posts)
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: !Submarine440          # ← Change this!
+      MYSQL_DATABASE: ghost
+      MYSQL_USER: ghost
+      MYSQL_PASSWORD: !Varian440          # Must match ghost service above
+    volumes:
+      - ./mysql-data:/var/lib/mysql                         # Persistent DB
+
+# Optional: uncomment if you later want caching (helps with larger sites)
+#  cache:
+#    image: redis:alpine
+#    restart: unless-stopped
