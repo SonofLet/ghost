@@ -10,7 +10,7 @@ services:
       database__client: mysql
       database__connection__host: db
       database__connection__user: ghost
-      database__connection__password: !Varian440   # ← Change this!
+      database__connection__password: ${GHOST_DB_PASSWORD}   # ← Change this!
       database__connection__database: ghost
       # Optional: add SMTP later for newsletter testing (won't send externally yet)
       # mail__transport: SMTP
@@ -22,10 +22,10 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: !Submarine440          # ← Change this!
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}          # ← Change this!
       MYSQL_DATABASE: ghost
       MYSQL_USER: ghost
-      MYSQL_PASSWORD: !Varian440          # Must match ghost service above
+      MYSQL_PASSWORD: ${GHOST_DB_PASSWORD}          # Must match ghost service above
     volumes:
       - ./mysql-data:/var/lib/mysql                         # Persistent DB
 
